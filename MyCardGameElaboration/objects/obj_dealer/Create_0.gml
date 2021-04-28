@@ -70,7 +70,7 @@ global.currentPhase = global.PhaseDealing;
 
 // set real timer
 global.deltaTime = 1 / room_speed;
-timer = 0;
+timer = 1;
 
 
 // set score for player and computer

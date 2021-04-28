@@ -116,8 +116,8 @@ switch (global.currentPhase)
 					card.targetY = room_height - handPosYOffset;
 					card.depth = -1;
 					// played card changes to card chosen
-					ds_list_add(playerHand,card);
 					ds_list_delete(deck,topCardIndex);
+					ds_list_add(playerHand,card);
 			
 					// play sound
 					audio_play_sound(snd_card, 0, false);

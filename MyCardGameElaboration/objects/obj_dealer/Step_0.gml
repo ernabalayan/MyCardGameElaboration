@@ -3,12 +3,11 @@
 
 timer += global.deltaTime; // set timer 
 
-
+	show_debug_message("size of player hand: " + string(ds_list_size(playerHand)));
 var topCardIndex = ds_list_size(deck) - 1;
 	
 switch (global.currentPhase) 
 { 
-	
 		
 	case global.PhaseBeforeDealing: // if in phase before dealing
 	
@@ -109,7 +108,7 @@ switch (global.currentPhase)
 			var card = deck[|topCardIndex];
 		if (position_meeting(mouse_x, mouse_y,obj_hitme) && mouse_check_button_pressed(mb_left) && ds_list_size(deck) > 0)
 		{
-					
+				
 					//hover card and if you click on it it moves to the center
 					card.targetX = handPosX + handPosXOffset * ds_list_size(playerHand) + 100;
 					CardFaceUp(card,true);
@@ -118,6 +117,8 @@ switch (global.currentPhase)
 					// played card changes to card chosen
 					ds_list_delete(deck,topCardIndex);
 					ds_list_add(playerHand,card);
+				
+	
 			
 					// play sound
 					audio_play_sound(snd_card, 0, false);
@@ -136,6 +137,22 @@ switch (global.currentPhase)
 		break;
 		
 	case global.PhaseResult:
+	
+	for (var index = 0; index < ds_list_size(playerHand); index++)
+	{
+		var card = playerHand[|0];
+		var lard = playerHand[|1];
+		var playersTotalCardNumber = card.cardNumber + lard.cardNumber;
+	}
+		show_debug_message("players card total number is: " + string(playersTotalCardNumber));
+		if(playersTotalCardNumber > 21){
+			scoreComputer++;
+		}
+		if(playersTotalCardNumber == 21){
+			scorePlayer++;
+		}
+		
+	
 	for(var i = 0; i < ds_list_size(computerHand); i++){
 	CardFaceUp(computerHand[|i],true);
 	}
@@ -151,24 +168,27 @@ switch (global.currentPhase)
 		{
 		var card = computerHand[|0];
 		var computersTotalCardNumber = card.cardNumber + playedCardComputer.cardNumber; 
+		}
 		show_debug_message("computer total card number is: " + string(computersTotalCardNumber));
 		if(computersTotalCardNumber > 21)
 		{
-			scorePlayer = scorePlayer + 1;
+			scorePlayer++;;
 			
 		}
 
-		if (computersTotalCardNumber < 21) 
-		{
-			scoreComputer = scoreComputer + 1;
-		}
 		if (computersTotalCardNumber == 21) 
 		{
-			scoreComputer = scoreComputer + 1;
+			scoreComputer++;
 		}
-
+		if(playersTotalCardNumber > computersTotalCardNumber && playersTotalCardNumber < 21)
+		{
+			scorePlayer++;
 		}
-
+		if(computersTotalCardNumber > playersTotalCardNumber && computersTotalCardNumber < 21)
+		{
+			scoreComputer++;
+		}
+		
 		global.currentPhase = global.PhaseDiscard;
 	
 	break;
@@ -187,7 +207,8 @@ case global.PhaseDiscard:
 			//delete from player hand
 			var card = playerHand[|0];
 			ds_list_delete(playerHand, 0);
-		}
+			//ds_list_delete(playerHand,card);
+		} 
 		else
 		{
 			// delete from computer hand
@@ -200,7 +221,6 @@ case global.PhaseDiscard:
 		CardFaceUp(card, true);
 		// move to discard pile position
 		card.targetX = discardPosX;
-		
 		var depthIndex = ds_list_size(discardPile);
 		card.targetY = discardPosY - deckPosYOffset * depthIndex;
 		card.depth = deckSize - depthIndex;

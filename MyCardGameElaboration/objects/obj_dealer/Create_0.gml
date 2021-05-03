@@ -76,6 +76,7 @@ timer = 0;
 // set score for player and computer
 scorePlayer = 0;
 scoreComputer = 0;
+hitMe = false;
 
 playerMatchingCardCount = 0;
 computerMatchingCardCount = 0;
